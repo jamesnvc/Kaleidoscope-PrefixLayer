@@ -27,8 +27,9 @@ namespace kaleidoscope {
 
 const PrefixLayer::dict_t *PrefixLayer::dict;
 
+const static PrefixLayer::dict_t defaultmap[] PROGMEM = { {0xFFFF, {Key_NoKey}} };
+
 PrefixLayer::PrefixLayer() {
-  static PrefixLayer::dict_t defaultmap[] = { {0xFFFF, {Key_NoKey}} };
   dict = defaultmap;
 }
 
