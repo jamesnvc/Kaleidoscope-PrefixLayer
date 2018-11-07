@@ -61,12 +61,13 @@ const Key keymaps[][ROWS][COLS] PROGMEM = {
   ),
 };
 
-static const kaleidoscope::PrefixLayer::dict_t prefixlayerdict[] PROGMEM =
+static const kaleidoscope::plugin::PrefixLayer::dict_t prefixlayerdict[] PROGMEM =
   PREFIX_DICT({_TMUX, PREFIX_SEQ(LCTRL(Key_B))});
+
+KALEIDOSCOPE_INIT_PLUGINS(PrefixLayer);
 
 void setup() {
   Kaleidoscope.setup();
-  Kaleidoscope.use(&PrefixLayer);
   PrefixLayer.dict = prefixlayerdict;
 }
 

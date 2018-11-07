@@ -19,6 +19,9 @@
 #pragma once
 
 #include <Kaleidoscope.h>
+#include <Kaleidoscope-Ranges.h>
+#include <kaleidoscope/hid.h>
+
 
 #define PREFIX_MAX_SEQUENCE_LENGTH 4
 
@@ -26,7 +29,8 @@
 #define PREFIX_DICT(...) { __VA_ARGS__, {0xFFFF, {Key_NoKey}}}
 
 namespace kaleidoscope {
-class PrefixLayer : public KaleidoscopePlugin {
+namespace plugin {
+class PrefixLayer : public kaleidoscope::Plugin {
   public:
    typedef struct {
      uint16_t layer;
@@ -35,12 +39,11 @@ class PrefixLayer : public KaleidoscopePlugin {
 
    PrefixLayer(void);
 
-   void begin(void) final;
-
    static const dict_t *dict;
-  private:
-   static Key eventHandlerHook(Key mapped_key, byte row, byte col, uint8_t key_state);
+
+   EventHandlerResult onKeyswitchEvent(Key &mapped_key, byte row, byte col, uint8_t keyState);
+};
 };
 };
 
-extern kaleidoscope::PrefixLayer PrefixLayer;
+extern kaleidoscope::plugin::PrefixLayer PrefixLayer;

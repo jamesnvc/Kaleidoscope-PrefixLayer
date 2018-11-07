@@ -16,14 +16,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <Kaleidoscope-Ranges.h>
-#include <kaleidoscope/hid.h>
-
 #include <Kaleidoscope-PrefixLayer.h>
 
 #define isModifier(key) (key.raw >= Key_LeftControl.raw && key.raw <= Key_RightGui.raw)
 
 namespace kaleidoscope {
+namespace plugin {
 
 const PrefixLayer::dict_t *PrefixLayer::dict;
 
@@ -33,15 +31,12 @@ PrefixLayer::PrefixLayer() {
   dict = defaultmap;
 }
 
-void PrefixLayer::begin() {
-  Kaleidoscope.useEventHandlerHook(eventHandlerHook);
-}
+EventHandlerResult PrefixLayer::onKeyswitchEvent(Key &mapped_key, byte row, byte col, uint8_t keyState) {
+  if (keyState & INJECTED || isModifier(mapped_key)) {
+    return EventHandlerResult::OK;
+  }
 
-Key PrefixLayer::eventHandlerHook(Key mapped_key, byte row, byte col, uint8_t key_state) {
-  if (key_state & INJECTED || isModifier(mapped_key))
-    return mapped_key;
-
-  if (keyToggledOn(key_state) && mapped_key.raw <= ranges::FIRST) {
+  if (keyToggledOn(keyState) && mapped_key.raw <= kaleidoscope::ranges::FIRST) {
     for (uint8_t i = 0;; i++) {
       uint16_t layer = pgm_read_word(&(dict[i].layer));
       if (layer == 0xFFFF) break;
@@ -62,12 +57,15 @@ Key PrefixLayer::eventHandlerHook(Key mapped_key, byte row, byte col, uint8_t ke
                                WAS_PRESSED | INJECTED);
         }
         hid::sendKeyboardReport();
-        break;
+        return EventHandlerResult::EVENT_CONSUMED;
       }
     }
   }
-  return mapped_key;
+
+  return EventHandlerResult::OK;
+}
+
 }
 }
 
-kaleidoscope::PrefixLayer PrefixLayer;
+kaleidoscope::plugin::PrefixLayer PrefixLayer;
