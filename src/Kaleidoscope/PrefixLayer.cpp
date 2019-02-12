@@ -57,7 +57,6 @@ EventHandlerResult PrefixLayer::onKeyswitchEvent(Key &mapped_key, byte row, byte
                                WAS_PRESSED | INJECTED);
         }
         hid::sendKeyboardReport();
-        return EventHandlerResult::EVENT_CONSUMED;
       }
     }
   }
