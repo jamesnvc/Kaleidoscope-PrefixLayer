@@ -40,7 +40,7 @@ EventHandlerResult PrefixLayer::onKeyswitchEvent(Key &mapped_key, byte row, byte
     for (uint8_t i = 0;; i++) {
       uint16_t layer = pgm_read_word(&(dict[i].layer));
       if (layer == 0xFFFF) break;
-      if (Layer.isOn(layer)) {
+      if (Layer.isActive(layer)) {
         for (uint8_t j = 0;; j++) {
           Key k;
           k.raw = pgm_read_word(&(dict[i].prefix_seq[j].raw));
